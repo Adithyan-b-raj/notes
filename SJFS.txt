@@ -1,0 +1,54 @@
+#include<stdio.h>
+void main()
+{
+        int n,i,smallest,temp,j;
+        printf("enter the no processors\n");
+        scanf("%d",&n);
+        int pid[n],bt[n];
+        printf("enter the processes\n");
+        for(i=0;i<n;i++)
+                scanf("%d",&pid[i]);
+        for(i=0;i<n;i++)
+        {
+                printf("Enter the burst time of process with id%d\n",pid[i]);
+                scanf("%d",&bt[i]);
+        }
+        for(i=0;i<n;i++)
+        {
+                smallest=i;
+                for(j=i+1;j<n;j++)
+                {
+                        if(bt[j]<bt[smallest])
+                        {
+                                smallest=j;
+                        }
+                }
+                temp=bt[i];
+                bt[i]=bt[smallest];
+                bt[smallest]=temp;
+                temp=pid[i];
+                pid[i]=pid[smallest];
+                pid[smallest]=temp;
+        }
+        int wt[n];
+        wt[0]=0;
+        for(i=1;i<n;i++)
+                wt[i]=bt[i-1]+wt[i-1];
+        int tr[n];
+        for(i=0;i<n;i++)
+                tr[i]=bt[i]+wt[i];
+        float twt=0,ttr=0;
+        for(i=0;i<n;i++)
+        {
+                ttr=ttr+tr[i];
+                twt=twt+wt[i];
+        }
+        twt=twt/n;
+        ttr=ttr/n;
+        printf("process id\tBurst time\twaiting time\tTurn Around\n");
+        for(i=0;i<n;i++)
+        printf("%d\t\t%d\t\t%d\t\t%d\n",pid[i],bt[i],wt[i],tr[i]);
+        printf("Average waiting time:%lf\n",twt);
+        printf("Average turn around time:%lf\n",ttr);
+}
+
