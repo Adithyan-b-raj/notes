@@ -1,45 +1,50 @@
 #include<stdio.h>
-int main()
-{
-        int a[20],b[20],frame,h,p=0,q=0,m=0,n,k,i,q1=1,currentpages=0;
-        char f='F';
-        printf("enter th eno of pages:");
-        scanf("%d",&n);
-        printf("enter the no of frames:");
-        scanf("%d",&frame);
-        printf("enter %d page numbers:",n);
-        for(i=0;i<n;i++)
-                scanf("%d",&b[i]);
-        for(i=0;i<frame;i++)
-                a[i]=-1;
-        for(i=0;i<n;i++)
-        {
-                if(p==0)
-                {
-                        if(q>=frame)
-                                q=0;
-                        a[q]=b[i];
-                        q++;
-                        if(q1<frame)
-                                q1=q;
-                }
-                printf("\n%d",b[i]);
-                printf("\t");
-                for(h=0;h<frame;h++)
-                {
-                        printf("%d\t",a[h]);
-                }
-                if(p==0 && q<=frame)
-                {
-                        printf("-->%c",f);
-                        m++;
-                }
-                p=0;
-                for(k=0;k<q1;k++)
-                {
-                        if(b[i+1]==a[k])
-                                p=1;
-                }
+
+void main() { 
+    int i, j, n, rs[50], frame[10], nf, k, avail, pagefault = 0, pagehit = 0; 
+
+    printf("\nEnter the number of pages:\n"); 
+    scanf("%d", &n); 
+
+    printf("\nEnter the reference string:\n"); 
+    for(i = 0; i < n; i++) 
+        scanf("%d", &rs[i]); 
+
+    printf("\nEnter the number of frames: "); 
+    scanf("%d", &nf); 
+
+    for(i = 0; i < nf; i++) 
+        frame[i] = -1; 
+
+    j = 0; 
+    printf("Ref string\tPage frames\t\tPage Fault/Page Hit\n"); 
+    for(i = 0; i < n; i++) { 
+        printf("%d\t\t", rs[i]); 
+
+        // Display the current page frames first
+        for(k = 0; k < nf; k++) 
+            printf("%d\t", frame[k]); 
+        printf("\t");
+
+        avail = 0;
+        
+        // Check if the page is already in one of the frames (page hit)
+        for(k = 0; k < nf; k++) 
+            if(frame[k] == rs[i]) 
+                avail = 1; 
+
+        // If the page is not available (page fault)
+        if(avail == 0) { 
+            frame[j] = rs[i]; 
+            j = (j + 1) % nf; 
+            pagefault++; 
+            printf("Page Fault\n"); 
+        } else { 
+            pagehit++; 
+            printf("Page Hit\n"); 
         }
-        printf("\n No of faults:%d",m);
+    } 
+
+    printf("\nTotal Page Faults: %d", pagefault); 
+    printf("\nTotal Page Hits: %d", pagehit); 
 }
