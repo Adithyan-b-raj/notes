@@ -14,16 +14,21 @@ void main() {
     printf("Ref string\tPage frames\t\tPage Fault/Page Hit\n"); 
     for(i = 0; i < n; i++) { 
         printf("%d\t\t", rs[i]);
-        for(k = 0; k < nf; k++) 
-            printf("%d\t", frame[k]); 
-        printf("\t");
-        avail = 0;
+        
+            avail = 0;
         for(k = 0; k < nf; k++) 
             if(frame[k] == rs[i]) 
-                avail = 1; 
+            { 
+             avail = 1;
+             for(k=0;k<nf;k++)
+            printf("%d\t", frame[k]); 
+            }
+                 
         if(avail == 0) { 
             frame[j] = rs[i]; 
             j = (j + 1) % nf; 
+            for(k=0;k<nf;k++)
+            printf("%d\t", frame[k]); 
             pagefault++; 
             printf("Page Fault\n"); 
         } else { 
