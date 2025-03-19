@@ -23,7 +23,7 @@ void main()
                 smallest=i;
                 for(j=i+1;j<n;j++)
                 {
-                        if(bt[j]<bt[smallest])
+                        if(prio[j]<prio[smallest])
                         {
                                 smallest=j;
                         }
