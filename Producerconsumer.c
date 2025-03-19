@@ -3,10 +3,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#define BUFFER_SIZE 5
-#define MAX_ITEMS 20
-
-int buffer[BUFFER_SIZE];
+int buffer[5];
 int in = 0;
 int out = 0;
 int produced_count = 0;
@@ -20,7 +17,7 @@ void *producer(void *arg)
 {
     int item = 1;
 
-    while (produced_count < MAX_ITEMS)
+    while (produced_count < 20)
     {
         sem_wait(&empty);
         sem_wait(&mutex);
@@ -28,7 +25,7 @@ void *producer(void *arg)
         buffer[in] = item;
         printf("\nProduced: %d", item);
         item++;
-        in = (in + 1) % BUFFER_SIZE;
+        in = (in + 1) % 5;
 
         produced_count++;
 
@@ -41,14 +38,14 @@ void *producer(void *arg)
 
 void *consumer(void *arg)
 {
-    while (consumed_count < MAX_ITEMS)
+    while (consumed_count < 20)
     {
         sem_wait(&full);
         sem_wait(&mutex);
 
         int item = buffer[out];
         printf("\nConsumed: %d", item);
-        out = (out + 1) % BUFFER_SIZE;
+        out = (out + 1) % 5;
 
         consumed_count++;
 
@@ -65,7 +62,7 @@ int main()
 
     sem_init(&mutex, 0, 1);
     sem_init(&full, 0, 0);
-    sem_init(&empty, 0, BUFFER_SIZE);
+    sem_init(&empty, 0, 5);
 
     pthread_create(&producerThread, NULL, producer, NULL);
     pthread_create(&consumerThread, NULL, consumer, NULL);
